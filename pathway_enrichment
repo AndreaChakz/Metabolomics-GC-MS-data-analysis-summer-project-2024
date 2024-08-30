@@ -1,0 +1,41 @@
+#----Pathway--Enrichment----
+
+#Load the significantly different metabolites from above and compare to metabolic pathway library
+#Following : https://www.metaboanalyst.ca/resources/vignettes/Enrichment_Analysis.html
+
+#List your significant metabolites in a vector here
+tmp.vec <- c('Glycine', 'Malic acid', 'Xylose', 'Glycine', 'Glycerol 3-phosphoate', 'L-Pipecolic acid', 'D-Glucose', 'Malonic acid', 'Cysteamine')
+
+#Set up mSetObj with the list of compounds
+mSet<-Setup.MapData(mSet, tmp.vec);
+
+# Cross reference list of compounds against libraries (hmdb, pubchem, chebi, kegg, metlin)
+mSet<-CrossReferencing(mSet, "name"); 
+
+mSet$name.map #To view the names found, manually check that MetaboAnalystR has been able to cross-reference them 
+
+# Create the mapping results table
+mSet<-CreateMappingResultTable(mSet)
+
+# Input the name of the compound without any matches, only relevant if names not identified
+#mSet<-PerformDetailMatch(mSet,'');
+
+# Create list of candidates to replace the compound, only if some were not identified 
+#mSet <- GetCandidateList(mSet);
+
+# Set the metabolite filter
+mSet<-SetMetabolomeFilter(mSet, F);
+
+# Select metabolite set library, refer to 
+mSet<-SetCurrentMsetLib(mSet, "smpdb_pathway", 0);
+
+
+# Calculate hypergeometric score, results table generated in your working directory
+
+mSet<-CalculateHyperScore(mSet)
+
+# Plot the ORA, bar-graph
+mSet<-PlotORA(mSet, "ora_0_sn5noise10000", "bar", "png", 72, width=NA)
+
+
+
