@@ -1,0 +1,29 @@
+#---------Statistical analysis with MetaboAnalystR-----------
+
+#Find out which metabolites are significantly different between the LG and HG, using T-test
+#Make sure your SpecAbund excel file has group names, and names of the compounds. This is all that is used here. 
+#following https://www.metaboanalyst.ca/resources/vignettes/Statistical_Analysis_Module.html
+# Clean global environment
+rm(list = ls())
+
+library(MetaboAnalystR)
+#mSet<-InitDataObjects("conc", "stat", FALSE);
+mSet<-InitDataObjects("pktable", "pathqea", FALSE); 
+
+mSet<-Read.TextData(mSet, "C://Users//andre//Desktop//SUMMER_COURSE//data//forMetaboanalystR//SpecAbund_sn20noise10000nofill.csv", "rowu", "disc"); #Make sure to put the SpecAbund file you want to use in the right folder. 
+mSet<-SanityCheckData(mSet);
+
+mSet<-ReplaceMin(mSet);
+mSet<-PreparePrenormData(mSet);
+mSet<-Normalization(mSet, "NULL", "LogNorm", "MeanCenter", "S10T0", ratio=FALSE, ratioNum=20);
+
+mSet<-PlotNormSummary(mSet, "norm_0_matchms_sn20noise10000nofill", format ="png", dpi=72, width=NA); #change names according to settings
+mSet<-PlotSampleNormSummary(mSet, "snorm_0_matchms_sn20noise10000nofill", format = "png", dpi=72, width=NA);
+
+# Perform T-test (parametric)
+mSet<-Ttests.Anal(mSet, nonpar=F, threshp=0.05, paired=FALSE, equal.var=TRUE, "fdr", TRUE)
+
+# Plot of the T-test results
+mSet<-PlotTT(mSet, imgName = "matchms_tt_0_sn20noise10000nofill", format = "png", dpi = 72, width=NA)
+
+mSet #To see your data 
