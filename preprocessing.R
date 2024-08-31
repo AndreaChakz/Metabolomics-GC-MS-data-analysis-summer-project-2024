@@ -69,11 +69,10 @@ xset_grpd_rtcorr_grpd <- groupChromPeaks(xset_grpd_rtcorr, param = pdp)
 
 #---PREPROCESSING: PEAK FILLING WITH XCMS--------------------
 #Do peak filling to account for missing peaks
-#1xset_grpd_rtcorr_grpd_fild <- fillChromPeaks(xset_grpd_rtcorr_grpd)
+xset_grpd_rtcorr_grpd_fild <- fillChromPeaks(xset_grpd_rtcorr_grpd)
 
-#1save(xset_grpd_rtcorr_grpd_fild, file = "C://Users//andre//Desktop//SUMMER_COURSE//data//xset_filled_sn5noise10000nofill.RData")
-#1load("C://Users//andre//Desktop//SUMMER_COURSE//data//xset_filled_sn20noise10000nofill.RData")
-
+save(xset_grpd_rtcorr_grpd_fild, file = "C://Users//andre//Desktop//SUMMER_COURSE//data//xset_filled.RData")
+load("C://Users//andre//Desktop//SUMMER_COURSE//data//xset_filled.RData")
 
 #NOTE! We need to do RI calculation before clustering, because otherwise we are trying
 #to add more RI than there are clusters
@@ -89,9 +88,9 @@ xset_grpd_rtcorr_grpd <- groupChromPeaks(xset_grpd_rtcorr, param = pdp)
 load("C://Users//andre//Desktop//SUMMER_COURSE//data//ExpDes.RData")
 
 
-#1rc_obj <- ramclustR(xset_grpd_rtcorr_grpd_fild, ExpDes = ExpDes) #When using peak filling
+rc_obj <- ramclustR(xset_grpd_rtcorr_grpd_fild, ExpDes = ExpDes) #When using peak filling
 
-rc_obj <- ramclustR(xset_grpd_rtcorr_grpd, ExpDes = ExpDes) #When not using peak filling 
+#rc_obj <- ramclustR(xset_grpd_rtcorr_grpd, ExpDes = ExpDes) #When not using peak filling 
 
 #line below is to avoid errors in write.msp. Seems to not be needed now, but if it says something with msint then use it. 
 #rc_obj$msmsint <- rc_obj$msint
